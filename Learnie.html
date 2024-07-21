@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learned Topics</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f7e6f0; /* Light pink background */
+            color: #563E58; /* Dark purple text */
+        }
+        h1, h2 {
+            color: #8A4D76; /* Medium purple headings */
+        }
+        #topics-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #topics-list li {
+            margin-bottom: 10px;
+            background-color: #fff; /* White background for topics */
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .notes {
+            display: none;
+            padding-top: 10px;
+        }
+        .notes-toggle {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ffbfd6; /* Light pink button background */
+            color: #8A4D76; /* Medium purple button text */
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #search-result {
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Learned Topics</h1>
+
+    <form id="topic-form">
+        <label for="topic">Add a new topic:</label><br>
+        <input type="text" id="topic" name="topic">
+        <button type="submit" style="background-color: #ffbfd6; color: #8A4D76; border: none; padding: 5px 10px; border-radius: 3px;">Add</button>
+    </form>
+
+    <h2>Topics I've Learned:</h2>
+    <ul id="topics-list">
+        <!-- List of learned topics will appear here -->
+    </ul>
+
+    <h2>Search if I've Learned a Topic:</h2>
+    <input type="text" id="search-topic" placeholder="Enter topic">
+    <button onclick="searchTopic()" style="background-color: #ffbfd6; color: #8A4D76; border: none; padding: 5px 10px; border-radius: 3px;">Search</button>
+
+    <p id="search-result"></p>
+
+    <script>
+        document.getElementById("topic-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var topicInput = document.getElementById("topic");
+            var topic = topicInput.value;
+            if (topic.trim() !== "") {
+                addTopicToList(topic);
+                topicInput.value = "";
+            } else {
+                alert("Please enter a topic.");
+            }
+        });
+
+        function addTopicToList(topic) {
+            var topicsList = document.getElementById("topics-list");
+            var li = document.createElement("li");
+            li.innerHTML = "<span>" + topic + "</span><br><button class='notes-toggle'>Notes</button><div class='notes' contenteditable='true' style='border: 1px solid #8A4D76; padding: 5px; margin-top: 5px; background-color: #ffebf2; display: none;'>Write your notes here...</div>";
+            topicsList.appendChild(li);
+        }
+
+        function searchTopic() {
+            var searchInput = document.getElementById("search-topic").value.toLowerCase();
+            var topicsList = document.getElementById("topics-list").getElementsByTagName("li");
+            var found = false;
+
+            for (var i = 0; i < topicsList.length; i++) {
+                var topic = topicsList[i].getElementsByTagName('span')[0].textContent.toLowerCase();
+                if (topic === searchInput) {
+                    found = true;
+                    break;
+                }
+            }
+
+            var searchResult = document.getElementById("search-result");
+            if (found) {
+                searchResult.textContent = "Yes, you have learned this topic.";
+            } else {
+                searchResult.textContent = "No, you haven't learned this topic yet.";
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('notes-toggle')) {
+                var notes = e.target.nextElementSibling;
+                if (notes.style.display === 'none' || notes.style.display === '') {
+                    notes.style.display = 'block';
+                } else {
+                    notes.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
